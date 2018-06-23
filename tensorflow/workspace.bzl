@@ -1,6 +1,7 @@
 # TensorFlow external dependencies that can be loaded in WORKSPACE files.
 
 load("//third_party/gpus:cuda_configure.bzl", "cuda_configure")
+load("//third_party/gpus:rocm_configure.bzl", "rocm_configure")
 load("//third_party/tensorrt:tensorrt_configure.bzl", "tensorrt_configure")
 load("//third_party:nccl/nccl_configure.bzl", "nccl_configure")
 load("//third_party/mkl:build_defs.bzl", "mkl_repository")
@@ -37,6 +38,7 @@ def tf_workspace(path_prefix="", tf_repo_name=""):
   git_configure(name="local_config_git")
   sycl_configure(name="local_config_sycl")
   syslibs_configure(name="local_config_syslibs")
+  rocm_configure(name="local_config_rocm")
   python_configure(name="local_config_python")
 
   # For windows bazel build
