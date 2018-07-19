@@ -1980,8 +1980,9 @@ GetCudnnConvolutionBackwardFilterAlgo(const CudnnHandle& cudnn,
 
 port::StatusOr<DeviceMemory<uint8>> AllocateCudnnConvolutionForwardWorkspace(
     Stream* stream, const CudnnHandle& cudnn,
-    const dnn::AlgorithmDesc& algorithm_desc,
-    const CudnnTensorDescriptor& input_nd, const CudnnFilterDescriptor& filter,
+    dnn::AlgorithmDesc& algorithm_desc,
+    const CudnnTensorDescriptor& input_nd,
+    const CudnnFilterDescriptor& filter,
     const CudnnConvolutionDescriptor& conv,
     const CudnnTensorDescriptor& output_nd,
     ScratchAllocator* scratch_allocator) {
@@ -1998,6 +1999,7 @@ port::StatusOr<DeviceMemory<uint8>> AllocateCudnnConvolutionForwardWorkspace(
       /*wDesc=*/filter.handle(), /*convDesc=*/conv.handle(),
       /*yDesc=*/output_nd.handle(), /*algo=*/ToConvForwardAlgo(algorithm_desc),
       /*sizeInBytes=*/&size_in_bytes));
+  algorithm_desc.set_scratch_size(size_in_bytes);
   int64 size_in_bytes_int64 = size_in_bytes;
 
   if (TF_PREDICT_FALSE(size_in_bytes_int64 < 0)) {
@@ -2022,8 +2024,9 @@ port::StatusOr<DeviceMemory<uint8>> AllocateCudnnConvolutionForwardWorkspace(
 port::StatusOr<DeviceMemory<uint8>>
 AllocateCudnnConvolutionBackwardDataWorkspace(
     Stream* stream, const CudnnHandle& cudnn,
-    const dnn::AlgorithmDesc& algorithm_desc,
-    const CudnnTensorDescriptor& input_nd, const CudnnFilterDescriptor& filter,
+    dnn::AlgorithmDesc& algorithm_desc,
+    const CudnnTensorDescriptor& input_nd,
+    const CudnnFilterDescriptor& filter,
     const CudnnConvolutionDescriptor& conv,
     const CudnnTensorDescriptor& output_nd,
     ScratchAllocator* scratch_allocator) {
@@ -2042,6 +2045,7 @@ AllocateCudnnConvolutionBackwardDataWorkspace(
       /*dxDesc=*/input_nd.handle(),
       /*algo=*/ToConvBackwardDataAlgo(algorithm_desc),
       /*sizeInBytes=*/&size_in_bytes));
+  algorithm_desc.set_scratch_size(size_in_bytes);
   int64 size_in_bytes_int64 = size_in_bytes;
 
   if (TF_PREDICT_FALSE(size_in_bytes_int64 < 0)) {
@@ -2066,8 +2070,9 @@ AllocateCudnnConvolutionBackwardDataWorkspace(
 port::StatusOr<DeviceMemory<uint8>>
 AllocateCudnnConvolutionBackwardFilterWorkspace(
     Stream* stream, const CudnnHandle& cudnn,
-    const dnn::AlgorithmDesc& algorithm_desc,
-    const CudnnTensorDescriptor& input_nd, const CudnnFilterDescriptor& filter,
+    dnn::AlgorithmDesc& algorithm_desc,
+    const CudnnTensorDescriptor& input_nd,
+    const CudnnFilterDescriptor& filter,
     const CudnnConvolutionDescriptor& conv,
     const CudnnTensorDescriptor& output_nd,
     ScratchAllocator* scratch_allocator) {
@@ -2086,6 +2091,7 @@ AllocateCudnnConvolutionBackwardFilterWorkspace(
       /*gradDesc=*/filter.handle(),
       /*algo=*/ToConvBackwardFilterAlgo(algorithm_desc),
       /*sizeInBytes=*/&size_in_bytes));
+  algorithm_desc.set_scratch_size(size_in_bytes);
   int64 size_in_bytes_int64 = size_in_bytes;
 
   if (TF_PREDICT_FALSE(size_in_bytes_int64 < 0)) {
