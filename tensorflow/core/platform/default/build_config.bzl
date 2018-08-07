@@ -595,7 +595,8 @@ def tf_additional_cupti_wrapper_deps():
     ]
 
 def tf_additional_device_tracer_srcs():
-    return ["platform/default/device_tracer.cc"]
+  return ["platform/default/device_tracer_cuda.cc",
+          "platform/default/device_tracer_rocm.cc"]
 
 def tf_additional_device_tracer_cuda_deps():
     return []
