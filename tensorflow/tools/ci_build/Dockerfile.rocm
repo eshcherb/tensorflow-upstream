@@ -32,7 +32,7 @@ RUN cd $HOME/hcc && mkdir build && cd build && cmake -DUSE_PROF_API=1 -DPROF_API
 RUN cd $HOME/HIP && mkdir build && cd build && cmake -DUSE_PROF_API=1 -DPROF_API_HEADER_PATH=$HOME/roctracer/inc/roctracer .. && sudo make package -j$(nproc) && sudo dpkg -i *.deb
 
 # build rocTracer
-RUN cd $HOME/roctracer && mkdir build && cd build && HCC_HOME=/opt/rocm/hcc HIP_PATH=/opt/rocm/hip CMAKE_PREFIX_PATH=/opt/rocm/lib:/opt/rocm/include/hsa cmake .. && make package -j$(nproc)
+RUN cd $HOME/roctracer && mkdir build && cd build && HCC_HOME=/opt/rocm/hcc HIP_PATH=/opt/rocm/hip CMAKE_PREFIX_PATH=/opt/rocm/lib:/opt/rocm/include/hsa cmake -DCMAKE_INSTALL_PREFIX=/opt/rocm .. && make package -j$(nproc)
 
 ###########################
 # Stage 2 : do the TF build
