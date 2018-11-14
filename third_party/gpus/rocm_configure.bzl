@@ -533,6 +533,8 @@ def _create_dummy_repository(repository_ctx):
             "%{rocfft_lib}": _lib_name("rocfft", cpu_value),
             "%{hiprand_lib}": _lib_name("hiprand", cpu_value),
             "%{copy_rules}": "",
+            "%{roctracer_lib}": _lib_name("roctracer", cpu_value),
+            "%{rocm_include_genrules}": "",
             "%{rocm_headers}": "",
         },
     )
@@ -646,7 +648,6 @@ def _create_local_rocm_repository(repository_ctx):
     # Copy header and library files to execroot.
     # rocm_toolkit_path
     rocm_toolkit_path = rocm_config.rocm_toolkit_path
-<<<<<<< 14059b95d80e4a4afad906b6c60d57e5a9359031
     copy_rules = [
         make_copy_dir_rule(
             repository_ctx,
@@ -672,40 +673,13 @@ def _create_local_rocm_repository(repository_ctx):
             src_dir = rocm_toolkit_path + "/miopen/include",
             out_dir = "rocm/include/miopen",
         ),
+        make_copy_dir_rule(
+            repository_ctx,
+            name = "roctracer-include",
+            src_dir = rocm_toolkit_path + "/roctracer/include",
+            out_dir = "rocm/include/roctracer",
+        ),
     ]
-=======
-    rocm_include_path = rocm_toolkit_path + "/include"
-    genrules = [_symlink_genrule_for_dir(
-        repository_ctx,
-        rocm_include_path,
-        "rocm/include",
-        "rocm-include",
-    )]
-    genrules.append(_symlink_genrule_for_dir(
-        repository_ctx,
-        rocm_toolkit_path + "/rocfft/include",
-        "rocm/include/rocfft",
-        "rocfft-include",
-    ))
-    genrules.append(_symlink_genrule_for_dir(
-        repository_ctx,
-        rocm_toolkit_path + "/rocblas/include",
-        "rocm/include/rocblas",
-        "rocblas-include",
-    ))
-    genrules.append(_symlink_genrule_for_dir(
-        repository_ctx,
-        rocm_toolkit_path + "/miopen/include",
-        "rocm/include/miopen",
-        "miopen-include",
-    ))
-    genrules.append(_symlink_genrule_for_dir(
-        repository_ctx,
-        rocm_toolkit_path + "/roctracer/include",
-        "rocm/include/roctracer",
-        "roctracer-include",
-    ))
->>>>>>> linking roctracer library
 
     rocm_libs = _find_libs(repository_ctx, rocm_config)
     rocm_lib_srcs = []
@@ -741,12 +715,8 @@ def _create_local_rocm_repository(repository_ctx):
             "%{rocfft_lib}": rocm_libs["rocfft"].file_name,
             "%{hiprand_lib}": rocm_libs["hiprand"].file_name,
             "%{miopen_lib}": rocm_libs["miopen"].file_name,
-<<<<<<< 14059b95d80e4a4afad906b6c60d57e5a9359031
-            "%{copy_rules}": "\n".join(copy_rules),
-=======
             "%{roctracer_lib}": rocm_libs["roctracer"].file_name,
-            "%{rocm_include_genrules}": "\n".join(genrules),
->>>>>>> linking roctracer library
+            "%{copy_rules}": "\n".join(copy_rules),
             "%{rocm_headers}": ('":rocm-include",\n' +
                                 '":rocfft-include",\n' +
                                 '":rocblas-include",\n' +
