@@ -716,14 +716,5 @@ std::unique_ptr<profiler::ProfilerInterface> CreateDeviceTracer(
   return absl::make_unique<DeviceTracer>();
 }
 
-auto register_device_tracer_factory = [] {
-  bool enable;
-  TF_CHECK_OK(ReadBoolFromEnvVar("TF_ENABLE_OSS_GPU_PROFILER", true, &enable));
-  if (enable) {
-    RegisterProfilerFactory(&CreateDeviceTracer);
-  }
-  return 0;
-}();
-
 }  // namespace tensorflow
 #endif  // GOOGLE_CUDA
