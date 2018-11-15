@@ -666,12 +666,4 @@ std::unique_ptr<DeviceTracer> CreateDeviceTracer() {
 
 }  // namespace tensorflow
 
-#else  // GOOGLE_CUDA
-
-namespace tensorflow {
-
-std::unique_ptr<DeviceTracer> CreateDeviceTracer() { return nullptr; }
-
-}  // namespace tensorflow
-
 #endif  // GOOGLE_CUDA
