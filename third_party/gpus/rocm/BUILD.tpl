@@ -2,6 +2,8 @@ licenses(["restricted"])  # MPL2, portions GPL v3, LGPL v3, BSD-like
 
 package(default_visibility = ["//visibility:public"])
 
+load("@local_config_rocm//rocm:build_defs.bzl", "if_roctracer_is_configured")
+
 config_setting(
     name = "using_hipcc",
     values = {
@@ -86,8 +88,8 @@ cc_library(
 
 cc_library(
     name = "roctracer",
-    srcs = ["rocm/lib/%{roctracer_lib}"],
-    data = ["rocm/lib/%{roctracer_lib}"],
+    srcs = if_roctracer_is_configured(["rocm/lib/%{roctracer_lib}"]),
+    data = if_roctracer_is_configured(["rocm/lib/%{roctracer_lib}"]),
     includes = [
         ".",
         "rocm/include",
@@ -106,8 +108,9 @@ cc_library(
         ":rocfft",
         ":hiprand",
         ":miopen",
-        ":roctracer",
-    ],
+    ] + if_roctracer_is_configured([
+        ":roctracer"
+    ]),
 )
 
 %{copy_rules}
