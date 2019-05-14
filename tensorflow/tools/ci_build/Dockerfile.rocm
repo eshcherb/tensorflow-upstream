@@ -58,7 +58,7 @@ RUN apt-get update --allow-insecure-repositories && DEBIAN_FRONTEND=noninteracti
 RUN apt-get update --allow-insecure-repositories && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --allow-unauthenticated \
     rocm-dev rocm-libs rocm-utils rocm-cmake \
-    rocfft miopen-hip miopengemm rocblas hipblas rocrand \
+    rocfft miopen-hip miopengemm rocblas hipblas rocrand roctracer-dev \
     rocm-profiler cxlactivitylogger && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -130,3 +130,6 @@ ENV TF_NEED_ROCM 1
 # By default, HIP runtime "hides" 256MB from the TF Runtime, but with recent changes (update to ROCm2.3, dynamic loading of roc* libs, et al)
 # it seems that we need to up the threshold slightly to 320MB
 ENV HIP_HIDDEN_FREE_MEM=320
+
+# Enable device tracer
+ENV TF_NEED_ROCM_GPU_TRACER 1
